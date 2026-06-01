@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JalanPulang - Menemukan Kembali Arah Spiritual Anda</title>
+  <meta name="description" content="JalanPulang adalah aplikasi produktivitas Islami modern yang memandu langkah ibadah harian Anda dengan jadwal shalat presisi, Al-Quran digital, pelacak target ibadah, dan kompas kiblat.">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="../assets/images/favicon.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- GSAP & ScrollTrigger CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#fdf8f6',
+              100: '#f2e8e5',
+              200: '#eaddd7',
+              300: '#e0cec7',
+              400: '#d2bab0',
+              500: '#926247', // The brownish-gold accent
+              600: '#84583f', // Main Brand Color
+              700: '#6e4a35',
+              800: '#5a3d2b',
+              900: '#462f21',
+              950: '#2d1e15',
+            },
+            gold: {
+              light: '#fef3c7',
+              DEFAULT: '#f59e0b',
+              dark: '#b45309'
+            },
+            surface: {
+              light: '#ffffff',
+              dark: '#2d2420'
+            },
+            background: {
+              light: '#FDFBF7',
+              dark: '#1e1815'
+            }
+          },
+          fontFamily: {
+            amiri: ["Amiri", "serif"],
+            inter: ["Inter", "sans-serif"],
+          },
+          boxShadow: {
+            'premium': '0 20px 40px -15px rgba(132, 88, 63, 0.08)',
+            'premium-hover': '0 30px 60px -15px rgba(132, 88, 63, 0.15)',
+            'neon': '0 0 20px rgba(146, 98, 71, 0.2)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #FDFBF7;
+      overflow-x: hidden;
+    }
+    
+    .font-arabic {
+      font-family: 'Amiri', serif;
+    }
+
+    /* Micro-animations */
+    .pulse-glow {
+      animation: pulse-glow 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% {
+        box-shadow: 0 0 15px rgba(132, 88, 63, 0.1);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 25px rgba(132, 88, 63, 0.25);
+        transform: scale(1.02);
+      }
+    }
+
+    .float-slow {
+      animation: float-slow 6s infinite ease-in-out;
+    }
+
+    @keyframes float-slow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(1deg); }
+    }
+
+    .float-slower {
+      animation: float-slower 8s infinite ease-in-out;
+      animation-delay: 1s;
+    }
+
+    @keyframes float-slower {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(-1.5deg); }
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #FDFBF7;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #eaddd7;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #c8b7ae;
+    }
+
+    /* Hide default checkboxes styling */
+    .custom-checkbox input:checked ~ .checkmark {
+      background-color: #84583f;
+      border-color: #84583f;
+    }
+    .custom-checkbox input:checked ~ .checkmark svg {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Safe transition system to prevent GSAP conflicts */
+    .navbar-transition {
+      transition: padding 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease, -webkit-backdrop-filter 0.3s ease;
+    }
+
+    #hero-phone-mockup {
+      /* Base state without transform transition to avoid GSAP conflict */
+      transition: box-shadow 0.5s ease;
+    }
+    #hero-phone-mockup:hover {
+      transform: scale(1.01);
+      transition: transform 0.5s ease, box-shadow 0.5s ease;
+    }
+
+    .btn-hover-safe {
+      transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+    }
+    .btn-hover-safe:hover {
+      transform: translateY(-2px);
+      transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+    }
+
+    .feature-card {
+      /* Safe transition list without transform/opacity during GSAP entrance */
+      transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .feature-card:hover {
+      transform: translateY(-6px);
+      transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .screen-tab {
+      transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, ring 0.3s ease;
+    }
+  </style>
+</head>
+<body class="text-stone-800 antialiased selection:bg-primary-200 selection:text-primary-900">
+
+  <!-- ================= HEADER / NAVBAR ================= -->
+  <header id="navbar" class="fixed top-0 left-0 w-full z-50 navbar-transition py-5 bg-transparent">
+    <div class="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center space-x-3 group">
+        <div class="relative w-11 h-11 bg-white rounded-2xl flex items-center justify-center shadow-md border border-primary-100 overflow-hidden transform group-hover:scale-105 transition duration-300">
+          <img src="../assets/images/logo-jalanpulang.png" alt="JalanPulang Logo" class="w-9 h-9 object-contain">
+        </div>
+        <span class="text-2xl font-bold tracking-tight text-primary-950 font-inter">
+          Jalan<span class="text-primary-600 font-extrabold">Pulang</span>
+        </span>
+      </a>
+
+      <!-- Desktop Nav Menu -->
+      <nav class="hidden md:flex items-center space-x-1 bg-white/70 backdrop-blur-md px-6 py-2 rounded-full border border-primary-100/50 shadow-sm">
+        <a href="#fitur" class="text-sm font-semibold text-stone-600 hover:text-primary-600 px-4 py-1.5 rounded-full transition">Fitur</a>
+        <a href="#jadwal" class="text-sm font-semibold text-stone-600 hover:text-primary-600 px-4 py-1.5 rounded-full transition">Interaktif</a>
+        <a href="#mockup-slider" class="text-sm font-semibold text-stone-600 hover:text-primary-600 px-4 py-1.5 rounded-full transition">Pratinjau App</a>
+        <a href="#spiritual" class="text-sm font-semibold text-stone-600 hover:text-primary-600 px-4 py-1.5 rounded-full transition">Inspirasi</a>
+      </nav>
+
+      <!-- CTA Button -->
+      <div class="hidden md:flex items-center">
+        <a href="https://expo.dev/artifacts/eas/a4F6pqaiLb4tZNgx9RjSYw.apk" download class="relative overflow-hidden group bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-bold text-sm px-6 py-3 rounded-full shadow-md shadow-primary-600/10 hover:shadow-lg hover:shadow-primary-600/20 transform hover:-translate-y-0.5 transition-all flex items-center gap-2">
+          <span>Unduh Aplikasi</span>
+          <i data-lucide="download" class="w-4 h-4 transform group-hover:translate-y-0.5 transition duration-300"></i>
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button id="mobile-menu-btn" class="md:hidden p-2 rounded-xl bg-white border border-primary-100 shadow-sm text-stone-700 hover:text-primary-600 focus:outline-none transition">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobile-drawer" class="fixed inset-0 bg-stone-900/40 backdrop-blur-sm z-50 transform translate-x-full transition-transform duration-300 md:hidden flex justify-end">
+      <div class="w-72 max-w-[80vw] h-full bg-background-light p-8 flex flex-col justify-between border-l border-primary-100 shadow-2xl">
+        <div>
+          <!-- Close button -->
+          <div class="flex items-center justify-between mb-8">
+            <span class="text-xl font-bold text-primary-950">Menu</span>
+            <button id="close-drawer-btn" class="p-2 rounded-xl hover:bg-primary-100 text-stone-500 hover:text-primary-600 transition">
+              <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+          </div>
+          
+          <nav class="flex flex-col space-y-4">
+            <a href="#fitur" class="mobile-nav-link text-lg font-semibold text-stone-700 hover:text-primary-600 transition flex items-center gap-3 py-2"><i data-lucide="sparkles" class="w-5 h-5 text-primary-500"></i> Fitur Utama</a>
+            <a href="#jadwal" class="mobile-nav-link text-lg font-semibold text-stone-700 hover:text-primary-600 transition flex items-center gap-3 py-2"><i data-lucide="clock" class="w-5 h-5 text-primary-500"></i> Widget Interaktif</a>
+            <a href="#mockup-slider" class="mobile-nav-link text-lg font-semibold text-stone-700 hover:text-primary-600 transition flex items-center gap-3 py-2"><i data-lucide="smartphone" class="w-5 h-5 text-primary-500"></i> Tampilan Aplikasi</a>
+            <a href="#spiritual" class="mobile-nav-link text-lg font-semibold text-stone-700 hover:text-primary-600 transition flex items-center gap-3 py-2"><i data-lucide="book-open" class="w-5 h-5 text-primary-500"></i> Renungan Kalam</a>
+          </nav>
+        </div>
+
+        <div class="space-y-4">
+          <a href="https://expo.dev/artifacts/eas/a4F6pqaiLb4tZNgx9RjSYw.apk" download class="w-full text-center bg-primary-600 hover:bg-primary-700 text-white font-bold px-6 py-3.5 rounded-2xl shadow-lg flex items-center justify-center gap-2 transition duration-300">
+            <i data-lucide="download" class="w-5 h-5"></i>
+            <span>Unduh APK Resmi</span>
+          </a>
+          <p class="text-xs text-center text-stone-400">Versi Terbaru v1.4.0</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- ================= HERO SECTION ================= -->
+  <section id="hero-section" class="relative min-h-[90vh] pt-32 pb-20 flex items-center overflow-hidden">
+    <!-- Subtle Background Graphics -->
+    <div class="absolute inset-0 z-0 pointer-events-none opacity-50">
+      <div class="absolute -top-40 -left-40 w-96 h-96 bg-primary-100 rounded-full filter blur-[100px]"></div>
+      <div class="absolute top-[40%] -right-48 w-[400px] h-[400px] bg-primary-100/60 rounded-full filter blur-[120px]"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10 w-full">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+        
+        <!-- Hero Information (Left) -->
+        <div class="lg:col-span-6 text-center lg:text-left space-y-8 flex flex-col justify-center">
+          <div id="hero-badge" class="inline-flex self-center lg:self-start items-center space-x-2 bg-primary-100/50 border border-primary-200/50 px-5 py-1.5 rounded-full text-primary-800 text-sm font-semibold hover:bg-primary-100">
+            <span class="flex h-2 w-2 relative">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-500 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-primary-600"></span>
+            </span>
+            <span>Kini Tersedia: JalanPulang v1.4.0</span>
+          </div>
+
+          <div class="space-y-4">
+            <h1 id="hero-title" class="text-4xl md:text-5xl xl:text-6xl font-black text-primary-950 tracking-tight leading-[1.1] font-inter">
+              Menemukan Kembali <br class="hidden md:inline">
+              <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-700 via-primary-600 to-primary-800">
+                Arah Spiritual
+              </span> Anda
+            </h1>
+            <p id="hero-subtitle" class="text-base md:text-lg text-stone-600 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium">
+              Aplikasi produktivitas Islami yang dirancang dengan estetika modern, minimalis, dan fungsional. Membantu Anda istiqamah dalam ibadah harian secara mudah, tenang, dan tertata.
+            </p>
+          </div>
+
+          <div id="hero-buttons" class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+            <a href="https://expo.dev/artifacts/eas/a4F6pqaiLb4tZNgx9RjSYw.apk" download class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-bold rounded-2xl shadow-xl shadow-primary-600/10 hover:shadow-2xl hover:shadow-primary-600/20 flex items-center justify-center gap-3 btn-hover-safe">
+              <i data-lucide="download" class="w-5 h-5"></i>
+              <span>Unduh APK Android</span>
+            </a>
+            <a href="#fitur" class="w-full sm:w-auto px-8 py-4 bg-white border border-stone-200 hover:border-primary-300 text-stone-700 hover:text-primary-700 font-bold rounded-2xl shadow-sm hover:shadow flex items-center justify-center gap-2 btn-hover-safe">
+              <span>Pelajari Fitur</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+          </div>
+
+          <!-- Mini Badges / App Store Indicators -->
+          <div id="hero-info-footer" class="flex items-center justify-center lg:justify-start gap-6 pt-4 text-xs font-semibold text-stone-400 border-t border-primary-100/50 max-w-md self-center lg:self-start w-full">
+            <div class="flex items-center gap-2">
+              <i data-lucide="shield-check" class="w-5 h-5 text-emerald-500"></i>
+              <span>100% Aman & Terverifikasi</span>
+            </div>
+            <div class="h-4 w-px bg-stone-200"></div>
+            <div class="flex items-center gap-2">
+              <i data-lucide="smartphone" class="w-5 h-5 text-primary-500"></i>
+              <span>Aplikasi Tanpa Iklan</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Device Mockup + Floating Widgets (Right) -->
+        <div class="lg:col-span-6 relative flex justify-center items-center mt-12 lg:mt-0">
+          
+          <!-- Mock Phone Frame (Pure HTML/CSS) -->
+          <div id="hero-phone-mockup" class="relative w-[290px] h-[580px] bg-stone-955 rounded-[44px] p-3 shadow-2xl border-4 border-stone-800/80 z-10 overflow-hidden">
+            <!-- Screen notch -->
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-stone-950 rounded-b-2xl z-40 flex items-center justify-center">
+              <div class="w-12 h-1 bg-stone-850 rounded-full mb-1"></div>
+            </div>
+            
+            <!-- Screen Contents -->
+            <div class="w-full h-full bg-[#FDFBF7] rounded-[34px] overflow-hidden relative flex flex-col pt-6 font-inter shadow-inner">
+              
+              <!-- Status Bar -->
+              <div class="flex justify-between px-6 pt-2 pb-1 text-[10px] font-bold text-primary-900 z-30">
+                <span>09:41</span>
+                <div class="flex items-center space-x-1">
+                  <i data-lucide="signal" class="w-3 h-3"></i>
+                  <i data-lucide="wifi" class="w-3 h-3"></i>
+                  <i data-lucide="battery" class="w-3 h-3"></i>
+                </div>
+              </div>
+
+              <!-- Inside App Content (Header) -->
+              <div class="flex items-center justify-center my-3 px-5">
+                <div class="flex items-center">
+                  <img src="../assets/images/logo-jalanpulang.png" alt="App Logo" class="w-8 h-8 mr-1.5 object-contain">
+                  <span class="text-sm font-bold text-primary-900 font-inter">JalanPulang</span>
+                </div>
+              </div>
+
+              <!-- Card Next Prayer (Shalat) -->
+              <div class="mx-4 bg-[#fcecd9] rounded-2xl p-4 mb-4 border border-[#f5d9c3] relative overflow-hidden shadow-sm">
+                <div class="z-10 relative">
+                  <span class="text-[9px] font-bold text-primary-800 uppercase tracking-wider">Selanjutnya</span>
+                  <h4 class="text-xl font-extrabold text-primary-900 mb-0.5">Dhuhr 12:02</h4>
+                  <p class="text-[9px] font-medium text-primary-700">Maghrib tersisa 2 jam 15 menit lagi</p>
+                </div>
+                <img src="../assets/images/mosque.png" alt="Mosque Illus" class="absolute -right-2 -bottom-2 w-20 h-20 opacity-80 object-contain z-0">
+              </div>
+
+              <!-- Fast Actions Row -->
+              <div class="flex justify-between gap-2.5 px-4 mb-4">
+                <!-- Qibla button -->
+                <div class="flex-1 bg-white p-3 rounded-2xl border border-stone-100 flex items-center justify-center flex-col shadow-sm">
+                  <div class="w-7 h-7 bg-amber-50 rounded-full flex items-center justify-center mb-1">
+                    <i data-lucide="compass" class="w-4 h-4 text-amber-600"></i>
+                  </div>
+                  <span class="text-[10px] font-bold text-primary-900">Kiblat</span>
+                </div>
+                <!-- Qur'an button -->
+                <div class="flex-1 bg-white p-3 rounded-2xl border border-stone-100 flex items-center justify-center flex-col shadow-sm">
+                  <div class="w-7 h-7 bg-primary-100 rounded-full flex items-center justify-center mb-1">
+                    <i data-lucide="book-open" class="w-4 h-4 text-primary-600"></i>
+                  </div>
+                  <span class="text-[10px] font-bold text-primary-900">Al-Quran</span>
+                </div>
+                <!-- Donation button -->
+                <div class="flex-1 bg-white p-3 rounded-2xl border border-stone-100 flex items-center justify-center flex-col shadow-sm">
+                  <div class="w-7 h-7 bg-emerald-50 rounded-full flex items-center justify-center mb-1">
+                    <i data-lucide="gift" class="w-4 h-4 text-emerald-600"></i>
+                  </div>
+                  <span class="text-[10px] font-bold text-primary-900">Donasi</span>
+                </div>
+              </div>
+
+              <!-- Daily Activity Section in Mock Phone -->
+              <div class="px-4 flex-1 overflow-hidden flex flex-col justify-start">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-[11px] font-bold text-primary-900">Ibadah Hari Ini</span>
+                  <span class="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">80% Selesai</span>
+                </div>
+                <!-- Mock list items -->
+                <div class="space-y-1.5">
+                  <div class="flex items-center justify-between bg-white p-2.5 rounded-xl border border-stone-100 shadow-sm">
+                    <div class="flex items-center gap-2">
+                      <div class="w-5 h-5 bg-primary-500 rounded flex items-center justify-center text-white"><i data-lucide="check" class="w-3.5 h-3.5"></i></div>
+                      <span class="text-[10px] font-semibold text-stone-500 line-through">Dzikir Pagi</span>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between bg-white p-2.5 rounded-xl border border-stone-100 shadow-sm">
+                    <div class="flex items-center gap-2">
+                      <div class="w-5 h-5 bg-primary-500 rounded flex items-center justify-center text-white"><i data-lucide="check" class="w-3.5 h-3.5"></i></div>
+                      <span class="text-[10px] font-semibold text-stone-500 line-through">Shalat Duha</span>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between bg-white p-2.5 rounded-xl border border-stone-100 shadow-sm">
+                    <div class="flex items-center gap-2">
+                      <div class="w-5 h-5 border border-stone-250 rounded flex items-center justify-center"></div>
+                      <span class="text-[10px] font-bold text-primary-955">Membaca Quran</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Mini Nav Bar inside mockup -->
+              <div class="mt-auto bg-white/95 border-t border-stone-100 py-3.5 px-6 flex justify-between items-center rounded-b-[34px] shadow-lg">
+                <i data-lucide="home" class="w-5 h-5 text-primary-600"></i>
+                <i data-lucide="clock" class="w-5 h-5 text-stone-300"></i>
+                <i data-lucide="book-open" class="w-5 h-5 text-stone-300"></i>
+                <i data-lucide="compass" class="w-5 h-5 text-stone-300"></i>
+                <i data-lucide="user" class="w-5 h-5 text-stone-300"></i>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- FLOATING WIDGET 1: Qibla Compass (GSAP float-slow) -->
+          <div id="float-qibla" class="float-slow absolute -left-6 md:-left-12 top-10 bg-white/90 backdrop-blur-md p-5 rounded-[22px] border border-primary-100 shadow-premium z-20 flex items-center gap-3.5 max-w-[190px] select-none hover:shadow-premium-hover transition-shadow duration-300">
+            <div class="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center flex-shrink-0">
+              <i data-lucide="compass" class="w-5 h-5 text-amber-600 animate-spin-slow"></i>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold text-stone-400 uppercase tracking-wide">Qibla Finder</p>
+              <h5 class="text-xs font-extrabold text-primary-950">Arah Kabah 295°</h5>
+              <p class="text-[9px] font-semibold text-emerald-600 flex items-center gap-0.5 mt-0.5">
+                <i data-lucide="locate-fixed" class="w-2.5 h-2.5"></i> GPS Presisi
+              </p>
+            </div>
+          </div>
+
+          <!-- FLOATING WIDGET 2: Ayah of The Day (GSAP float-slower) -->
+          <div id="float-ayah" class="float-slower absolute -right-6 md:-right-12 top-48 bg-white/95 backdrop-blur-md p-5 rounded-[24px] border border-primary-100 shadow-premium z-20 max-w-[210px] hover:shadow-premium-hover transition-shadow duration-300">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-6 h-6 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <i data-lucide="book-open" class="w-3.5 h-3.5 text-primary-600"></i>
+              </div>
+              <span class="text-[9px] font-extrabold text-primary-800">Ayat Pilihan</span>
+            </div>
+            <p class="font-arabic text-sm text-right text-stone-900 leading-relaxed font-bold">إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ</p>
+            <p class="text-[9.5px] font-bold text-stone-600 mt-1">"Hanya kepada-Mu kami menyembah dan hanya kepada-Mu..."</p>
+            <p class="text-[8px] font-bold text-stone-400 mt-0.5">QS. Al-Fatihah: 5</p>
+          </div>
+
+          <!-- FLOATING WIDGET 3: Routine Tracker Indicator -->
+          <div id="float-routine" class="float-slow absolute -left-8 md:-left-16 bottom-20 bg-white/90 backdrop-blur-md p-5 rounded-[22px] border border-primary-100 shadow-premium z-20 flex items-center gap-3.5 select-none hover:shadow-premium-hover transition-shadow duration-300">
+            <div class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center flex-shrink-0">
+              <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600"></i>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold text-stone-400 uppercase tracking-wide">Target Harian</p>
+              <h5 class="text-xs font-extrabold text-primary-955">Rutinitas Istiqamah</h5>
+              <div class="w-24 h-1.5 bg-stone-100 rounded-full mt-1.5 overflow-hidden">
+                <div class="h-full bg-emerald-500 rounded-full w-4/5"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ================= KEY FEATURES SECTION ================= -->
+  <section id="fitur" class="py-24 bg-white relative z-20">
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+      
+      <!-- Section Header -->
+      <div class="max-w-3xl mx-auto text-center space-y-4 mb-20">
+        <h2 class="text-sm font-extrabold tracking-widest text-primary-600 uppercase">Fitur Istimewa</h2>
+        <h3 class="text-3xl md:text-4xl font-extrabold text-primary-955 tracking-tight leading-tight">
+          Menyederhanakan Ibadah Anda dalam Satu Aplikasi yang Indah
+        </h3>
+        <p class="text-stone-500 font-medium">
+          Dilengkapi dengan fitur inti yang terintegrasi penuh untuk memastikan Anda tidak melewatkan momentum kebaikan setiap hari.
+        </p>
+      </div>
+
+      <!-- Features Card Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        
+        <!-- Feature 1: Prayer Times -->
+        <div class="feature-card bg-background-light hover:bg-[#FAF6F0] p-8 rounded-[32px] border border-primary-100/50 hover:border-primary-200 shadow-premium hover:shadow-premium-hover group">
+          <div class="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-105 transition-transform duration-300">
+            <i data-lucide="clock" class="w-7 h-7 text-amber-600"></i>
+          </div>
+          <h4 class="text-lg font-bold text-primary-955 mb-3 group-hover:text-primary-800 transition">Jadwal Shalat Akurat</h4>
+          <p class="text-sm text-stone-500 leading-relaxed font-medium">
+            Jadwal shalat terintegrasi berdasarkan koordinat GPS Anda secara otomatis dengan notifikasi alarm adzan yang merdu.
+          </p>
+        </div>
+
+        <!-- Feature 2: Quran -->
+        <div class="feature-card bg-background-light hover:bg-[#FAF6F0] p-8 rounded-[32px] border border-primary-100/50 hover:border-primary-200 shadow-premium hover:shadow-premium-hover group">
+          <div class="w-14 h-14 bg-primary-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-105 transition-transform duration-300">
+            <i data-lucide="book-open" class="w-7 h-7 text-primary-600"></i>
+          </div>
+          <h4 class="text-lg font-bold text-primary-955 mb-3 group-hover:text-primary-800 transition">Al-Quran & Bookmark</h4>
+          <p class="text-sm text-stone-500 leading-relaxed font-medium">
+            Membaca Al-Quran digital kapan saja. Dilengkapi fitur penanda halaman / riwayat bacaan terakhir agar tilawah Anda teratur.
+          </p>
+        </div>
+
+        <!-- Feature 3: Tracker -->
+        <div class="feature-card bg-background-light hover:bg-[#FAF6F0] p-8 rounded-[32px] border border-primary-100/50 hover:border-primary-200 shadow-premium hover:shadow-premium-hover group">
+          <div class="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-105 transition-transform duration-300">
+            <i data-lucide="calendar-check" class="w-7 h-7 text-emerald-600"></i>
+          </div>
+          <h4 class="text-lg font-bold text-primary-955 mb-3 group-hover:text-primary-800 transition">Pelacak Ibadah Harian</h4>
+          <p class="text-sm text-stone-500 leading-relaxed font-medium">
+            Buat target rutinitas kebaikan Anda sendiri, pantau progress harian, dan bangun habit shalih dengan pencapaian terukur.
+          </p>
+        </div>
+
+        <!-- Feature 4: Qibla -->
+        <div class="feature-card bg-background-light hover:bg-[#FAF6F0] p-8 rounded-[32px] border border-primary-100/50 hover:border-primary-200 shadow-premium hover:shadow-premium-hover group">
+          <div class="w-14 h-14 bg-rose-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-105 transition-transform duration-300">
+            <i data-lucide="compass" class="w-7 h-7 text-rose-600"></i>
+          </div>
+          <h4 class="text-lg font-bold text-primary-955 mb-3 group-hover:text-primary-800 transition">Kompas Kiblat Presisi</h4>
+          <p class="text-sm text-stone-500 leading-relaxed font-medium">
+            Temukan arah kiblat Ka'bah dengan presisi tinggi di mana pun Anda berada memanfaatkan sensor magnetik & akselerometer perangkat.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ================= INTERACTIVE WIDGETS SECTION ================= -->
+  <section id="jadwal" class="py-24 bg-background-light relative z-20">
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+        
+        <!-- Left: Descriptive Text -->
+        <div id="playground-info" class="lg:col-span-5 space-y-6">
+          <h2 class="text-sm font-extrabold tracking-widest text-primary-600 uppercase">Uji Coba Langsung</h2>
+          <h3 class="text-3xl md:text-4xl font-extrabold text-primary-955 tracking-tight leading-tight">
+            Rasakan Pengalaman Interaktif Di Sini
+          </h3>
+          <p class="text-stone-600 leading-relaxed font-medium">
+            Cobalah berinteraksi langsung dengan simulasi widget asli dari aplikasi kami. Kami merancang interface yang terasa hidup, organik, dan sangat bersahabat bagi pengguna.
+          </p>
+          
+          <div class="space-y-4 pt-4">
+            <div class="flex items-start gap-4">
+              <div class="w-6 h-6 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 flex-shrink-0 mt-0.5">
+                <i data-lucide="check" class="w-3.5 h-3.5"></i>
+              </div>
+              <p class="text-sm text-stone-600 font-semibold">Tandai tugas harian di sebelah kanan untuk melihat visualisasi progress bar terisi.</p>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="w-6 h-6 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 flex-shrink-0 mt-0.5">
+                <i data-lucide="check" class="w-3.5 h-3.5"></i>
+              </div>
+              <p class="text-sm text-stone-600 font-semibold">Arahkan kursor mouse Anda pada kartu Kompas Kiblat untuk memutar jarum arah shalat.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Interactive Playground Container -->
+        <div id="playground-cards" class="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-8">
+          
+          <!-- PLAYGROUND WIDGET 1: Interactive Daily Checklist -->
+          <div class="bg-white p-6 rounded-[32px] border border-primary-100 shadow-premium flex flex-col justify-between min-h-[360px]">
+            <div>
+              <!-- Widget Header -->
+              <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-8 h-8 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600">
+                    <i data-lucide="clipboard-list" class="w-4 h-4"></i>
+                  </div>
+                  <span class="text-xs font-bold text-primary-955">Daily Tracker</span>
+                </div>
+                <span id="tracker-pct" class="text-xs font-extrabold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">0% Selesai</span>
+              </div>
+
+              <!-- Animated Progress Bar -->
+              <div class="w-full h-2.5 bg-stone-100 rounded-full mb-6 overflow-hidden">
+                <div id="tracker-bar" class="h-full bg-emerald-500 rounded-full transition-all duration-300 w-0"></div>
+              </div>
+
+              <!-- Checklist Form -->
+              <div class="space-y-3.5" id="checklist-container">
+                <label class="custom-checkbox flex items-center justify-between p-3.5 bg-stone-50/50 hover:bg-stone-50 rounded-2xl border border-stone-100 cursor-pointer select-none transition">
+                  <div class="flex items-center gap-3.5">
+                    <div class="relative w-5 h-5 flex items-center justify-center">
+                      <input type="checkbox" value="25" class="sr-only peer" onclick="updateProgress()">
+                      <span class="checkmark absolute inset-0 rounded-md border-2 border-stone-300 bg-white flex items-center justify-center transition-all peer-checked:bg-primary-600 peer-checked:border-primary-600">
+                        <i data-lucide="check" class="w-3.5 h-3.5 text-white opacity-0 transform scale-75 transition-all"></i>
+                      </span>
+                    </div>
+                    <span class="text-xs font-bold text-stone-700 peer-checked:text-stone-400 peer-checked:line-through transition-all">Dzikir Pagi & Petang</span>
+                  </div>
+                </label>
+
+                <label class="custom-checkbox flex items-center justify-between p-3.5 bg-stone-50/50 hover:bg-stone-50 rounded-2xl border border-stone-100 cursor-pointer select-none transition">
+                  <div class="flex items-center gap-3.5">
+                    <div class="relative w-5 h-5 flex items-center justify-center">
+                      <input type="checkbox" value="25" class="sr-only peer" onclick="updateProgress()">
+                      <span class="checkmark absolute inset-0 rounded-md border-2 border-stone-300 bg-white flex items-center justify-center transition-all peer-checked:bg-primary-600 peer-checked:border-primary-600">
+                        <i data-lucide="check" class="w-3.5 h-3.5 text-white opacity-0 transform scale-75 transition-all"></i>
+                      </span>
+                    </div>
+                    <span class="text-xs font-bold text-stone-700 peer-checked:text-stone-400 peer-checked:line-through transition-all">Shalat Fardhu di Masjid</span>
+                  </div>
+                </label>
+
+                <label class="custom-checkbox flex items-center justify-between p-3.5 bg-stone-50/50 hover:bg-stone-50 rounded-2xl border border-stone-100 cursor-pointer select-none transition">
+                  <div class="flex items-center gap-3.5">
+                    <div class="relative w-5 h-5 flex items-center justify-center">
+                      <input type="checkbox" value="25" class="sr-only peer" onclick="updateProgress()">
+                      <span class="checkmark absolute inset-0 rounded-md border-2 border-stone-300 bg-white flex items-center justify-center transition-all peer-checked:bg-primary-600 peer-checked:border-primary-600">
+                        <i data-lucide="check" class="w-3.5 h-3.5 text-white opacity-0 transform scale-75 transition-all"></i>
+                      </span>
+                    </div>
+                    <span class="text-xs font-bold text-stone-700 peer-checked:text-stone-400 peer-checked:line-through transition-all">Tilawah Al-Quran (1 Juz)</span>
+                  </div>
+                </label>
+
+                <label class="custom-checkbox flex items-center justify-between p-3.5 bg-stone-50/50 hover:bg-stone-50 rounded-2xl border border-stone-100 cursor-pointer select-none transition">
+                  <div class="flex items-center gap-3.5">
+                    <div class="relative w-5 h-5 flex items-center justify-center">
+                      <input type="checkbox" value="25" class="sr-only peer" onclick="updateProgress()">
+                      <span class="checkmark absolute inset-0 rounded-md border-2 border-stone-300 bg-white flex items-center justify-center transition-all peer-checked:bg-primary-600 peer-checked:border-primary-600">
+                        <i data-lucide="check" class="w-3.5 h-3.5 text-white opacity-0 transform scale-75 transition-all"></i>
+                      </span>
+                    </div>
+                    <span class="text-xs font-bold text-stone-700 peer-checked:text-stone-400 peer-checked:line-through transition-all">Sedekah harian via QRIS</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Congratulations Popup Glow -->
+            <div id="tracker-complete-alert" class="hidden mt-4 p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold rounded-2xl text-center items-center justify-center gap-2">
+              <i data-lucide="sparkles" class="w-4 h-4 animate-bounce text-emerald-600"></i>
+              <span>Maa Syaa Allah! Target hari ini tercapai!</span>
+            </div>
+          </div>
+
+
+          <!-- PLAYGROUND WIDGET 2: Hover Active Qibla Compass -->
+          <div id="compass-card" class="bg-white p-6 rounded-[32px] border border-primary-100 shadow-premium flex flex-col justify-between items-center text-center min-h-[360px] cursor-crosshair group overflow-hidden relative">
+            
+            <!-- Graphic Background Coordinates -->
+            <div class="absolute inset-0 pointer-events-none opacity-20 flex items-center justify-center">
+              <div class="w-64 h-64 rounded-full border border-dashed border-stone-300"></div>
+            </div>
+
+            <div class="w-full flex justify-between items-center mb-2 z-10">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 bg-amber-50 rounded-xl flex items-center justify-center text-amber-600">
+                  <i data-lucide="compass" class="w-4 h-4"></i>
+                </div>
+                <span class="text-xs font-bold text-primary-955">Kompas Kiblat</span>
+              </div>
+              <span id="compass-degree" class="text-xs font-extrabold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full">295°</span>
+            </div>
+
+            <!-- Compass Outer Body -->
+            <div class="relative w-44 h-44 bg-stone-50 rounded-full border border-stone-200/80 shadow-inner flex items-center justify-center mt-3 z-10 transition duration-300 group-hover:bg-amber-50/20">
+              
+              <!-- Compass Dial Marks (N, E, S, W) -->
+              <span class="absolute top-2 text-[10px] font-extrabold text-stone-400">N</span>
+              <span class="absolute right-3 text-[10px] font-extrabold text-stone-400">E</span>
+              <span class="absolute bottom-2 text-[10px] font-extrabold text-stone-400">S</span>
+              <span class="absolute left-3 text-[10px] font-extrabold text-stone-400">W</span>
+
+              <!-- Golden Kaaba indicator at 295 deg (approx.) -->
+              <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 rotate-[295deg] pointer-events-none">
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 flex flex-col items-center">
+                  <span class="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
+                  <span class="text-[8px] font-black text-amber-600 mt-0.5">KIBLAT</span>
+                </div>
+              </div>
+
+              <!-- Center Needle -->
+              <div id="compass-needle" class="absolute w-2.5 h-32 flex flex-col justify-between items-center pointer-events-none transition-transform duration-300" style="transform: rotate(295deg)">
+                <!-- Red pointer end -->
+                <div class="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[20px] border-b-primary-600"></div>
+                <!-- Needle Center Dot -->
+                <div class="w-3 h-3 bg-primary-950 rounded-full border-2 border-white shadow"></div>
+                <!-- Silver pointer end -->
+                <div class="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[20px] border-t-stone-400"></div>
+              </div>
+
+            </div>
+
+            <p class="text-[10px] text-stone-400 font-semibold z-10 max-w-[200px] mt-4">
+              Gerakkan pointer Anda di atas kartu untuk memutar kompas ke arah kiblat presisi.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ================= APP PREVIEW MOCKUP SLIDER ================= -->
+  <section id="mockup-slider" class="py-24 bg-white relative z-20 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+      
+      <!-- Section Header -->
+      <div class="max-w-3xl mx-auto text-center space-y-4 mb-16">
+        <h2 class="text-sm font-extrabold tracking-widest text-primary-600 uppercase">Pratinjau Layar</h2>
+        <h3 class="text-3xl md:text-4xl font-extrabold text-primary-955 tracking-tight leading-tight">
+          Penjelajahan Antarmuka JalanPulang
+        </h3>
+        <p class="text-stone-500 font-medium">
+          Setiap detail didesain dengan rasa peduli yang mendalam. Temukan keindahan minimalis yang memicu ketenangan.
+        </p>
+      </div>
+
+      <!-- Main Slider Component -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Left Side: Interactive Screen Details Selector -->
+        <div id="slider-tabs-container" class="lg:col-span-5 space-y-3.5 order-2 lg:order-1">
+          
+          <!-- Tab 1: Dashboard Home -->
+          <button onclick="switchScreen(0)" class="screen-tab w-full text-left p-5 rounded-[24px] border border-primary-200/50 bg-[#FDFBF7] shadow-sm flex gap-4 items-start border-primary-500 ring-1 ring-primary-500/20">
+            <div class="tab-icon-box w-11 h-11 bg-primary-600 rounded-xl flex items-center justify-center text-white flex-shrink-0">
+              <i data-lucide="home" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h4 class="tab-title text-base font-bold text-primary-955 transition-colors duration-300">Beranda Utama</h4>
+              <p class="tab-desc text-xs text-stone-500 font-medium mt-1">Layar pusat informasi shalat selanjutnya, target harian aktif, dan ringkasan riwayat bacaan Quran.</p>
+            </div>
+          </button>
+
+          <!-- Tab 2: Jadwal Shalat -->
+          <button onclick="switchScreen(1)" class="screen-tab w-full text-left p-5 rounded-[24px] border border-stone-150 bg-white hover:bg-[#FDFBF7] flex gap-4 items-start">
+            <div class="tab-icon-box w-11 h-11 bg-stone-100 rounded-xl flex items-center justify-center text-stone-500 flex-shrink-0">
+              <i data-lucide="clock" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h4 class="tab-title text-base font-bold text-stone-700 transition-colors duration-300">Jadwal Shalat</h4>
+              <p class="tab-desc text-xs text-stone-400 font-medium mt-1">Tampilan penuh waktu Subuh, Syuruq, Zuhur, Asar, Maghrib, dan Isya dengan countdown presisi.</p>
+            </div>
+          </button>
+
+          <!-- Tab 3: Al-Quran -->
+          <button onclick="switchScreen(2)" class="screen-tab w-full text-left p-5 rounded-[24px] border border-stone-150 bg-white hover:bg-[#FDFBF7] flex gap-4 items-start">
+            <div class="tab-icon-box w-11 h-11 bg-stone-100 rounded-xl flex items-center justify-center text-stone-500 flex-shrink-0">
+              <i data-lucide="book-open" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h4 class="tab-title text-base font-bold text-stone-700 transition-colors duration-300">Al-Quran Digital</h4>
+              <p class="tab-desc text-xs text-stone-400 font-medium mt-1">Daftar surah interaktif dengan khat Arab standar madinah yang tajam, terjemahan, dan bookmark otomatis.</p>
+            </div>
+          </button>
+
+          <!-- Tab 4: Kompas Kiblat -->
+          <button onclick="switchScreen(3)" class="screen-tab w-full text-left p-5 rounded-[24px] border border-stone-150 bg-white hover:bg-[#FDFBF7] flex gap-4 items-start">
+            <div class="tab-icon-box w-11 h-11 bg-stone-100 rounded-xl flex items-center justify-center text-stone-500 flex-shrink-0">
+              <i data-lucide="compass" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h4 class="tab-title text-base font-bold text-stone-700 transition-colors duration-300">Kompas Kiblat</h4>
+              <p class="tab-desc text-xs text-stone-400 font-medium mt-1">Tampilan modern kompas 360 derajat lengkap dengan indikator getaran halus saat tepat menghadap Kabah.</p>
+            </div>
+          </button>
+
+          <!-- Tab 5: Donasi / QRIS -->
+          <button onclick="switchScreen(4)" class="screen-tab w-full text-left p-5 rounded-[24px] border border-stone-150 bg-white hover:bg-[#FDFBF7] flex gap-4 items-start">
+            <div class="tab-icon-box w-11 h-11 bg-stone-100 rounded-xl flex items-center justify-center text-stone-500 flex-shrink-0">
+              <i data-lucide="gift" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h4 class="tab-title text-base font-bold text-stone-700 transition-colors duration-300">Donasi & Infaq</h4>
+              <p class="tab-desc text-xs text-stone-400 font-medium mt-1">Dashboard kemudahan berinfaq secara aman dengan scanner QRIS instan bagi program kemanusiaan.</p>
+            </div>
+          </button>
+
+        </div>
+
+        <!-- Right Side: High-Fidelity Phone Viewport Container -->
+        <div id="slider-phone-container" class="lg:col-span-7 flex justify-center items-center order-1 lg:order-2">
+          
+          <!-- Outer Phone Body -->
+          <div class="relative w-[310px] h-[610px] bg-stone-950 rounded-[48px] p-3.5 shadow-2xl border-4 border-stone-800/80 overflow-hidden">
+            <!-- Screen notch -->
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-stone-950 rounded-b-2xl z-40"></div>
+            
+            <!-- Phone Internal Slider (Horizontal overflow hidden) -->
+            <div class="w-full h-full bg-[#FDFBF7] rounded-[36px] overflow-hidden relative flex flex-col pt-6 font-inter shadow-inner">
+              
+              <!-- Global Top Status Bar -->
+              <div class="flex justify-between px-6 pt-2 pb-1 text-[10px] font-bold text-primary-900 z-30">
+                <span>09:41</span>
+                <div class="flex items-center space-x-1">
+                  <i data-lucide="signal" class="w-3 h-3"></i>
+                  <i data-lucide="wifi" class="w-3 h-3"></i>
+                  <i data-lucide="battery" class="w-3 h-3"></i>
+                </div>
+              </div>
+
+              <!-- Main Screen Viewport containing all pages in horizontal layout -->
+              <div id="phone-slider-wrapper" class="flex w-[500%] h-full transition-transform duration-500 ease-out z-10">
+                
+                <!-- SCREEN 1: Dashboard -->
+                <div class="w-[20%] h-full flex flex-col pt-3 px-4">
+                  <div class="flex items-center justify-center mb-3">
+                    <img src="../assets/images/logo-jalanpulang.png" alt="" class="w-7 h-7 mr-1.5 object-contain">
+                    <span class="text-xs font-bold text-primary-900">JalanPulang</span>
+                  </div>
+
+                  <!-- Prayer Times Card inside slider -->
+                  <div class="bg-[#fcecd9] rounded-2xl p-4 mb-4 border border-[#f5d9c3] relative overflow-hidden shadow-sm">
+                    <span class="text-[8px] font-bold text-primary-800 uppercase">Selanjutnya</span>
+                    <h4 class="text-lg font-extrabold text-primary-900 mt-0.5">Dhuhr 12:02</h4>
+                    <p class="text-[9px] text-primary-700 mt-1">2 jam 15 menit lagi</p>
+                    <img src="../assets/images/mosque.png" alt="" class="absolute -right-2 -bottom-2 w-16 h-16 opacity-75 object-contain">
+                  </div>
+
+                  <!-- Quick Actions -->
+                  <div class="grid grid-cols-2 gap-2 mb-4">
+                    <div class="bg-white p-3 rounded-xl border border-stone-100 flex items-center gap-2 shadow-sm">
+                      <div class="w-7 h-7 bg-amber-50 rounded-lg flex items-center justify-center text-amber-600"><i data-lucide="compass" class="w-4 h-4"></i></div>
+                      <span class="text-[10px] font-extrabold text-primary-900">Kiblat</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-stone-100 flex items-center gap-2 shadow-sm">
+                      <div class="w-7 h-7 bg-primary-100 rounded-lg flex items-center justify-center text-primary-600"><i data-lucide="book-open" class="w-4 h-4"></i></div>
+                      <span class="text-[10px] font-extrabold text-primary-900">Quran</span>
+                    </div>
+                  </div>
+
+                  <!-- Daily Checklist -->
+                  <div class="bg-white p-4 rounded-2xl border border-stone-100 shadow-sm flex-1 mb-4 flex flex-col justify-start">
+                    <div class="flex justify-between items-center mb-2.5">
+                      <span class="text-[11px] font-bold text-primary-900">Target Harian</span>
+                      <span class="text-[9px] font-bold text-primary-600">66%</span>
+                    </div>
+                    <div class="space-y-1.5 overflow-hidden">
+                      <div class="flex items-center gap-2 bg-[#fdf8f6] p-2 rounded-lg border border-primary-100">
+                        <i data-lucide="check" class="w-3.5 h-3.5 text-primary-600"></i>
+                        <span class="text-[9.5px] font-bold text-stone-500 line-through">Dzikir Pagi</span>
+                      </div>
+                      <div class="flex items-center gap-2 bg-[#fdf8f6] p-2 rounded-lg border border-primary-100">
+                        <i data-lucide="check" class="w-3.5 h-3.5 text-primary-600"></i>
+                        <span class="text-[9.5px] font-bold text-stone-500 line-through">Shalat Rawatib</span>
+                      </div>
+                      <div class="flex items-center gap-2 bg-white p-2 rounded-lg border border-stone-50">
+                        <span class="w-3.5 h-3.5 border border-stone-300 rounded"></span>
+                        <span class="text-[9.5px] font-bold text-stone-700">Membaca Quran</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- SCREEN 2: Jadwal Shalat -->
+                <div class="w-[20%] h-full flex flex-col pt-3 px-4">
+                  <div class="text-center mb-3.5">
+                    <h4 class="text-xs font-extrabold text-primary-900">Jadwal Shalat</h4>
+                    <p class="text-[8px] font-bold text-stone-400">Senin, 1 Juni 2026</p>
+                  </div>
+                  <!-- Prayer Times Full List -->
+                  <div class="space-y-2.5 overflow-y-auto pr-0.5 flex-1 mb-4">
+                    <div class="flex justify-between items-center bg-white px-3.5 py-3 rounded-xl border border-stone-100 shadow-sm">
+                      <span class="text-[10px] font-bold text-stone-600">Subuh</span>
+                      <span class="text-[10px] font-extrabold text-primary-900">04:32</span>
+                    </div>
+                    <div class="flex justify-between items-center bg-white px-3.5 py-3 rounded-xl border border-stone-100 shadow-sm">
+                      <span class="text-[10px] font-bold text-stone-600">Syuruq</span>
+                      <span class="text-[10px] font-extrabold text-primary-900">05:48</span>
+                    </div>
+                    <div class="flex justify-between items-center bg-primary-100 px-3.5 py-3 rounded-xl border border-primary-200/50 shadow-sm shadow-primary-500/5 pulse-glow">
+                      <span class="text-[10px] font-extrabold text-primary-950">Zuhur</span>
+                      <span class="text-[10px] font-extrabold text-primary-950">12:02</span>
+                    </div>
+                    <div class="flex justify-between items-center bg-white px-3.5 py-3 rounded-xl border border-stone-100 shadow-sm">
+                      <span class="text-[10px] font-bold text-stone-600">Asar</span>
+                      <span class="text-[10px] font-extrabold text-primary-900">15:23</span>
+                    </div>
+                    <div class="flex justify-between items-center bg-white px-3.5 py-3 rounded-xl border border-stone-100 shadow-sm">
+                      <span class="text-[10px] font-bold text-stone-600">Maghrib</span>
+                      <span class="text-[10px] font-extrabold text-primary-900">17:55</span>
+                    </div>
+                    <div class="flex justify-between items-center bg-white px-3.5 py-3 rounded-xl border border-stone-100 shadow-sm">
+                      <span class="text-[10px] font-bold text-stone-600">Isya</span>
+                      <span class="text-[10px] font-extrabold text-primary-900">19:08</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- SCREEN 3: Al-Quran -->
+                <div class="w-[20%] h-full flex flex-col pt-3 px-4">
+                  <div class="text-center mb-3">
+                    <h4 class="text-xs font-extrabold text-primary-900">Al-Quranul Karim</h4>
+                    <p class="text-[8px] font-bold text-stone-400">Terjemahan Standar Kemenag RI</p>
+                  </div>
+                  <!-- Surah index -->
+                  <div class="space-y-2 overflow-y-auto flex-1 mb-4">
+                    <div class="flex items-center justify-between bg-white p-3 rounded-xl border border-stone-100 shadow-sm">
+                      <div class="flex items-center gap-2">
+                        <div class="w-5 h-5 bg-primary-100 rounded-md flex items-center justify-center text-[9px] font-extrabold text-primary-800">1</div>
+                        <div>
+                          <p class="text-[9.5px] font-bold text-primary-900">Al-Fatihah</p>
+                          <p class="text-[8px] text-stone-400 font-medium">Pembukaan • 7 Ayat</p>
+                        </div>
+                      </div>
+                      <span class="font-arabic text-xs font-extrabold text-primary-900">الفاتحة</span>
+                    </div>
+
+                    <div class="flex items-center justify-between bg-white p-3 rounded-xl border border-stone-100 shadow-sm">
+                      <div class="flex items-center gap-2">
+                        <div class="w-5 h-5 bg-primary-100 rounded-md flex items-center justify-center text-[9px] font-extrabold text-primary-800">2</div>
+                        <div>
+                          <p class="text-[9.5px] font-bold text-primary-900">Al-Baqarah</p>
+                          <p class="text-[8px] text-stone-400 font-medium">Sapi Betina • 286 Ayat</p>
+                        </div>
+                      </div>
+                      <span class="font-arabic text-xs font-extrabold text-primary-900">البقرة</span>
+                    </div>
+
+                    <div class="flex items-center justify-between bg-[#fdf8f6] p-3 rounded-xl border border-primary-200">
+                      <div class="flex items-center gap-2">
+                        <div class="w-5 h-5 bg-primary-600 rounded-md flex items-center justify-center text-[9px] font-extrabold text-white">18</div>
+                        <div>
+                          <div class="flex items-center gap-1">
+                            <p class="text-[9.5px] font-extrabold text-primary-950">Al-Kahfi</p>
+                            <i data-lucide="bookmark" class="w-2.5 h-2.5 text-primary-600"></i>
+                          </div>
+                          <p class="text-[8px] text-primary-700 font-medium">Penghuni Gua • Terakhir Dibaca</p>
+                        </div>
+                      </div>
+                      <span class="font-arabic text-xs font-extrabold text-primary-950">الكهف</span>
+                    </div>
+
+                    <div class="flex items-center justify-between bg-white p-3 rounded-xl border border-stone-100 shadow-sm">
+                      <div class="flex items-center gap-2">
+                        <div class="w-5 h-5 bg-primary-100 rounded-md flex items-center justify-center text-[9px] font-extrabold text-primary-800">36</div>
+                        <div>
+                          <p class="text-[9.5px] font-bold text-primary-900">Yasin</p>
+                          <p class="text-[8px] text-stone-400 font-medium">Ya Sin • 83 Ayat</p>
+                        </div>
+                      </div>
+                      <span class="font-arabic text-xs font-extrabold text-primary-900">يس</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- SCREEN 4: Kompas Kiblat -->
+                <div class="w-[20%] h-full flex flex-col pt-3 px-4 justify-between">
+                  <div class="text-center">
+                    <h4 class="text-xs font-extrabold text-primary-900">Arah Kiblat</h4>
+                    <p class="text-[8px] font-bold text-stone-400 font-medium">Menghadap Kabah (Makkah)</p>
+                  </div>
+                  <!-- Phone Compass Dial -->
+                  <div class="w-36 h-36 rounded-full border-2 border-dashed border-stone-300 relative flex items-center justify-center self-center my-6 shadow-inner bg-stone-50">
+                    <span class="absolute top-1 text-[8px] font-black text-stone-400">N</span>
+                    <span class="absolute bottom-1 text-[8px] font-black text-stone-400">S</span>
+                    <!-- Kaaba Graphic in compass -->
+                    <div class="absolute w-28 h-28 border border-stone-200 rounded-full flex items-center justify-center">
+                      <div class="w-6 h-6 bg-primary-955 rounded flex items-center justify-center text-amber-500 shadow">
+                        <i data-lucide="compass" class="w-3.5 h-3.5"></i>
+                      </div>
+                    </div>
+                    <!-- Indicator Needle -->
+                    <div class="absolute w-1.5 h-28 bg-gradient-to-b from-primary-600 via-primary-950 to-stone-400 rounded-full rotate-[295deg]"></div>
+                  </div>
+                  <div class="text-center mb-6">
+                    <span class="text-[13px] font-extrabold text-primary-900 block">295° NW</span>
+                    <span class="text-[8.5px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full inline-block mt-1">Presisi Kompas Maksimal</span>
+                  </div>
+                </div>
+
+                <!-- SCREEN 5: Donasi / QRIS -->
+                <div class="w-[20%] h-full flex flex-col pt-3 px-4 justify-between">
+                  <div class="text-center">
+                    <h4 class="text-xs font-extrabold text-primary-900">Donasi & Infaq</h4>
+                    <p class="text-[8px] font-bold text-stone-400">Salurkan Sedekah dengan Praktis</p>
+                  </div>
+                  
+                  <!-- QRIS Scan area -->
+                  <div class="bg-white p-3 rounded-2xl border border-stone-100 shadow-sm flex flex-col items-center my-4">
+                    <span class="text-[8px] font-extrabold text-primary-800 mb-2 uppercase tracking-wide">QRIS Yayasan JalanPulang</span>
+                    <!-- QRIS Mock Image box -->
+                    <div class="w-28 h-28 border-2 border-primary-500 rounded-lg p-1.5 relative flex items-center justify-center">
+                      <!-- Simulated QR code lines -->
+                      <div class="absolute inset-2 bg-stone-100 flex items-center justify-center overflow-hidden">
+                        <i data-lucide="qr-code" class="w-20 h-20 text-stone-800"></i>
+                      </div>
+                    </div>
+                    <p class="text-[7.5px] font-bold text-stone-400 text-center mt-2.5">
+                      Pindai QR di atas menggunakan aplikasi dompet digital Anda (Gopay, OVO, Dana, dll.)
+                    </p>
+                  </div>
+
+                  <div class="text-center mb-6">
+                    <span class="text-[8px] font-extrabold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">Proses Cepat & Terenkripsi</span>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Global Phone Bottom Tab Navigation (Highlights dynamically) -->
+              <div class="mt-auto bg-white/95 border-t border-stone-100 py-3.5 px-6 flex justify-between items-center rounded-b-[36px] shadow-lg z-20">
+                <button onclick="switchScreen(0)" class="mock-nav-item"><i data-lucide="home" class="w-5 h-5 text-primary-600 transition-colors duration-300"></i></button>
+                <button onclick="switchScreen(1)" class="mock-nav-item"><i data-lucide="clock" class="w-5 h-5 text-stone-300 transition-colors duration-300"></i></button>
+                <button onclick="switchScreen(2)" class="mock-nav-item"><i data-lucide="book-open" class="w-5 h-5 text-stone-300 transition-colors duration-300"></i></button>
+                <button onclick="switchScreen(3)" class="mock-nav-item"><i data-lucide="compass" class="w-5 h-5 text-stone-300 transition-colors duration-300"></i></button>
+                <button onclick="switchScreen(4)" class="mock-nav-item"><i data-lucide="gift" class="w-5 h-5 text-stone-300 transition-colors duration-300"></i></button>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ================= SPIRITUAL VERSE BLOCK ================= -->
+  <section id="spiritual" class="relative py-28 bg-stone-950 text-white overflow-hidden z-20">
+    <!-- Parallax / Dark Mosque Silhouette Backdrop -->
+    <div class="absolute inset-0 z-0 pointer-events-none opacity-20">
+      <img src="../assets/images/shilluet-mosque.png" alt="Mosque Silhouette" class="absolute bottom-0 left-0 w-full h-[60%] object-cover object-bottom">
+    </div>
+
+    <div class="max-w-4xl mx-auto px-6 text-center relative z-10 space-y-8">
+      
+      <div class="w-12 h-12 bg-primary-900 rounded-full flex items-center justify-center mx-auto text-primary-500 shadow-neon">
+        <i data-lucide="star" class="w-6 h-6 animate-pulse"></i>
+      </div>
+
+      <div id="spiritual-content" class="space-y-6">
+        <!-- Arabic script -->
+        <h4 class="font-arabic text-3xl md:text-5xl text-primary-100 font-extrabold tracking-wide leading-loose">
+          الَّذِينَ آمَنُوا وَتَطْمَئِنُّ قُلُوبُهُمْ بِذِكْرِ اللَّهِ ۗ أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ
+        </h4>
+        
+        <!-- Translation -->
+        <blockquote class="text-base md:text-lg text-primary-200 italic font-medium max-w-2xl mx-auto">
+          "(yaitu) orang-orang yang beriman dan hati mereka menjadi tenteram dengan mengingat Allah. Ingatlah, hanya dengan mengingat Allah hati menjadi tenteram."
+        </blockquote>
+        
+        <!-- Verse Label -->
+        <cite class="block text-xs font-extrabold text-primary-500 uppercase tracking-widest mt-2 not-italic">
+          QS. Ar-Ra'd: 28
+        </cite>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ================= CALL TO ACTION (CTA) ================= -->
+  <section class="py-24 bg-background-light relative z-20 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+      
+      <!-- Premium Curved Gradient Container -->
+      <div class="relative bg-gradient-to-tr from-primary-950 via-primary-900 to-primary-800 rounded-[48px] p-8 md:p-16 lg:p-20 shadow-2xl text-white overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-12">
+        
+        <!-- Absolute Background graphics -->
+        <div class="absolute inset-0 pointer-events-none opacity-40 z-0">
+          <div class="absolute -right-20 -top-20 w-96 h-96 bg-primary-600 rounded-full filter blur-[80px]"></div>
+          <div class="absolute -left-20 -bottom-20 w-96 h-96 bg-amber-600 rounded-full filter blur-[90px]"></div>
+        </div>
+
+        <!-- Left Details -->
+        <div class="lg:w-3/5 space-y-6 z-10 text-center lg:text-left">
+          <h2 class="text-3xl md:text-4xl xl:text-5xl font-black tracking-tight leading-tight">
+            Mulailah Langkah Hijrah <br class="hidden md:inline">
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-100 to-amber-200">Spiritual</span> Anda Hari Ini
+          </h2>
+          <p class="text-sm md:text-base text-primary-100 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium">
+            Unduh versi APK resmi secara langsung dan rasakan sendiri kemudahan mengorganisasikan ibadah Anda bersama ribuan umat Muslim lainnya.
+          </p>
+
+          <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
+            <!-- Direct APK Link -->
+            <a href="https://expo.dev/artifacts/eas/a4F6pqaiLb4tZNgx9RjSYw.apk" download class="bg-white hover:bg-primary-50 text-primary-950 font-extrabold px-8 py-4 rounded-2xl shadow-xl flex items-center justify-center gap-3 btn-hover-safe">
+              <i data-lucide="download" class="w-5 h-5 text-primary-700"></i>
+              <div class="text-left leading-none">
+                <!-- <span class="block text-[10px] font-bold text-stone-400 tracking-wider">UNDUH SEKARANG</span> -->
+                <span class="text-sm font-black text-primary-900 block mt-0.5">UNDUH SEKARANG</span>
+              </div>
+            </a>
+
+            <!-- Offline installer check -->
+            <div class="text-left text-xs font-semibold text-primary-300 max-w-xs self-center flex items-center gap-2">
+              <i data-lucide="check-circle" class="w-5 h-5 text-amber-500"></i>
+              <span>v1.4.0 • Android OS 8.0 ke atas</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Graphic: Quran Illustration/Mosque (Mockup Peeking Out) -->
+        <div class="lg:w-2/5 flex justify-center items-center z-10 relative">
+          <div class="relative w-64 h-64 md:w-80 md:h-80 flex items-center justify-center">
+            <!-- Simulated glowing aura -->
+            <div class="absolute inset-0 bg-primary-600/30 rounded-full filter blur-[60px] animate-pulse"></div>
+            <!-- Quran Illustration Asset -->
+            <img src="../assets/images/quran_illustration.png" alt="Quran Illustration" class="w-[85%] h-[85%] object-contain relative z-10 filter drop-shadow-2xl animate-float-slow">
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ================= MODERN FOOTER ================= -->
+  <footer class="bg-stone-950 text-stone-400 py-16 border-t border-stone-900 relative z-20">
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+      
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 pb-12 border-b border-stone-900">
+        
+        <!-- Footer Intro (4 cols) -->
+        <div class="md:col-span-4 space-y-5">
+          <a href="#" class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center border border-stone-800 overflow-hidden">
+              <img src="../assets/images/logo-jalanpulang.png" alt="JalanPulang Logo" class="w-8 h-8 object-contain">
+            </div>
+            <span class="text-xl font-bold tracking-tight text-white font-inter">
+              Jalan<span class="text-primary-500 font-extrabold">Pulang</span>
+            </span>
+          </a>
+          <p class="text-xs leading-relaxed font-medium">
+            JalanPulang berkomitmen menyajikan platform digital Islami yang memadukan estetika premium, integritas fiqih, dan teknologi produktivitas harian.
+          </p>
+          
+          <!-- Social Icons -->
+          <div class="flex space-x-4 pt-2">
+            <a href="#" class="w-9 h-9 rounded-full bg-stone-900 text-stone-400 hover:bg-primary-900 hover:text-white flex items-center justify-center transition">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+            </a>
+            <a href="#" class="w-9 h-9 rounded-full bg-stone-900 text-stone-400 hover:bg-primary-900 hover:text-white flex items-center justify-center transition">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
+            </a>
+            <a href="#" class="w-9 h-9 rounded-full bg-stone-900 text-stone-400 hover:bg-primary-900 hover:text-white flex items-center justify-center transition">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17z"/><polygon points="10 15 15 12 10 9 10 15"/></svg>
+            </a>
+            <a href="#" class="w-9 h-9 rounded-full bg-stone-900 text-stone-400 hover:bg-primary-900 hover:text-white flex items-center justify-center transition"><i data-lucide="mail" class="w-4 h-4"></i></a>
+          </div>
+        </div>
+
+        <!-- Footer Links 1 (2 cols) -->
+        <div class="md:col-span-2 space-y-4">
+          <h5 class="text-xs font-black text-white uppercase tracking-widest">Navigasi</h5>
+          <ul class="space-y-2.5 text-xs font-semibold text-stone-400">
+            <li><a href="#fitur" class="hover:text-primary-500 transition">Fitur Utama</a></li>
+            <li><a href="#jadwal" class="hover:text-primary-500 transition">Uji Coba Widget</a></li>
+            <li><a href="#mockup-slider" class="hover:text-primary-500 transition">Pratinjau Layar</a></li>
+            <li><a href="#spiritual" class="hover:text-primary-500 transition">Renungan Ayat</a></li>
+          </ul>
+        </div>
+
+        <!-- Footer Links 2 (2 cols) -->
+        <div class="md:col-span-2 space-y-4">
+          <h5 class="text-xs font-black text-white uppercase tracking-widest">Informasi Fiqih</h5>
+          <ul class="space-y-2.5 text-xs font-semibold text-stone-400">
+            <li><a href="#" class="hover:text-primary-500 transition">Kementerian Agama RI</a></li>
+            <li><a href="#" class="hover:text-primary-500 transition">Kalkulator Zakat</a></li>
+            <li><a href="#" class="hover:text-primary-500 transition">Ketentuan Fiqih Shalat</a></li>
+            <li><a href="#" class="hover:text-primary-500 transition">Kiblat Astronomis</a></li>
+          </ul>
+        </div>
+
+        <!-- Footer Contact (4 cols) -->
+        <div class="md:col-span-4 space-y-4">
+          <h5 class="text-xs font-black text-white uppercase tracking-widest">Hubungi Kami</h5>
+          <ul class="space-y-3.5 text-xs font-semibold text-stone-400">
+            <li class="flex items-start gap-3">
+              <i data-lucide="map-pin" class="w-4 h-4 text-primary-500 flex-shrink-0"></i>
+              <span>Gedung Litbang R&D Front End 2026, Jakarta, Indonesia</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <i data-lucide="phone" class="w-4 h-4 text-primary-500"></i>
+              <span>+62 (21) 500-PULANG</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <i data-lucide="shield" class="w-4 h-4 text-primary-500"></i>
+              <span>Kebijakan Privasi & Ketentuan Penggunaan</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Copyright Area -->
+      <div class="flex flex-col sm:flex-row justify-between items-center pt-8 text-xs font-semibold text-stone-600 gap-4">
+        <span>© 2026 JalanPulang. Seluruh Hak Cipta Dilindungi Undang-Undang.</span>
+        <div class="flex gap-4">
+          <a href="#" class="hover:text-primary-500 transition">Privacy Policy</a>
+          <span>•</span>
+          <a href="#" class="hover:text-primary-500 transition">Terms of Service</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+
+  <!-- ================= JAVASCRIPT LOGIC & ANIMATIONS ================= -->
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // 1. Mobile Menu Drawer logic
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const closeDrawerBtn = document.getElementById('close-drawer-btn');
+    const mobileDrawer = document.getElementById('mobile-drawer');
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileDrawer.classList.remove('translate-x-full');
+    });
+
+    closeDrawerBtn.addEventListener('click', () => {
+      mobileDrawer.classList.add('translate-x-full');
+    });
+
+    mobileNavLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileDrawer.classList.add('translate-x-full');
+      });
+    });
+
+
+    // 2. Navbar Scrolling Backdrop Transition
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        navbar.classList.remove('py-5', 'bg-transparent');
+        navbar.classList.add('py-3.5', 'bg-white/85', 'backdrop-blur-md', 'border-b', 'border-primary-100/50', 'shadow-sm');
+      } else {
+        navbar.classList.remove('py-3.5', 'bg-white/85', 'backdrop-blur-md', 'border-b', 'border-primary-100/50', 'shadow-sm');
+        navbar.classList.add('py-5', 'bg-transparent');
+      }
+    });
+
+
+    // 3. Playground Widget: Interactive Progress Tracker
+    function updateProgress() {
+      const checkboxes = document.querySelectorAll('#checklist-container input[type="checkbox"]');
+      let checkedCount = 0;
+      checkboxes.forEach(chk => {
+        if (chk.checked) checkedCount++;
+      });
+
+      const totalPct = Math.round((checkedCount / checkboxes.length) * 100);
+      const trackerBar = document.getElementById('tracker-bar');
+      const trackerPct = document.getElementById('tracker-pct');
+      const trackerAlert = document.getElementById('tracker-complete-alert');
+
+      // GSAP animate the progress bar width
+      gsap.to(trackerBar, {
+        width: totalPct + '%',
+        duration: 0.5,
+        ease: "power2.out"
+      });
+
+      trackerPct.textContent = totalPct + '% Selesai';
+
+      // Celebration Trigger at 100%
+      if (totalPct === 100) {
+        trackerAlert.classList.remove('hidden');
+        trackerAlert.classList.add('flex');
+        gsap.fromTo(trackerAlert, 
+          { scale: 0.85, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.5, ease: "elastic.out(1, 0.75)" }
+        );
+      } else {
+        trackerAlert.classList.add('hidden');
+        trackerAlert.classList.remove('flex');
+      }
+    }
+
+
+    // 4. Playground Widget: Qibla Compass Needle rotation
+    const compassCard = document.getElementById('compass-card');
+    const compassNeedle = document.getElementById('compass-needle');
+    const degreeText = document.getElementById('compass-degree');
+
+    compassCard.addEventListener('mousemove', (e) => {
+      const rect = compassCard.getBoundingClientRect();
+      // Center coordinates of the card
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      // Mouse vector relative to card center
+      const mouseX = e.clientX - centerX;
+      const mouseY = e.clientY - centerY;
+
+      // Compute rotation angle in degrees
+      let angleRad = Math.atan2(mouseY, mouseX);
+      let angleDeg = angleRad * (180 / Math.PI) + 90; // Offset needle pointer
+
+      // Smooth rotate needle to follow cursor using GSAP
+      gsap.to(compassNeedle, {
+        rotation: angleDeg,
+        duration: 0.35,
+        ease: "power2.out"
+      });
+
+      // Normalize degrees positive (0 - 360)
+      let normAngle = Math.round((angleDeg < 0 ? angleDeg + 360 : angleDeg) % 360);
+      degreeText.textContent = normAngle + '°';
+    });
+
+    // Reset needle to approximate local Indonesian Qibla (295 deg) on mouseleave
+    compassCard.addEventListener('mouseleave', () => {
+      gsap.to(compassNeedle, {
+        rotation: 295,
+        duration: 1,
+        ease: "elastic.out(1, 0.45)"
+      });
+      degreeText.textContent = '295°';
+    });
+
+
+     // 5. Interactive Phone Mockup Screen Slider Logic
+    const sliderWrapper = document.getElementById('phone-slider-wrapper');
+    const screenTabs = document.querySelectorAll('.screen-tab');
+
+    function switchScreen(index) {
+      // 1. Move the wrapper horizontally inside the phone
+      const offsetPercent = -index * 20;
+      gsap.to(sliderWrapper, {
+        x: offsetPercent + '%',
+        duration: 0.65,
+        ease: "power3.inOut"
+      });
+
+      // 2. Update descriptive active styles on the sidebar buttons
+      screenTabs.forEach((tab, i) => {
+        const iconBox = tab.querySelector('.tab-icon-box');
+        const title = tab.querySelector('.tab-title');
+        const desc = tab.querySelector('.tab-desc');
+
+        if (i === index) {
+          tab.classList.add('border-primary-500', 'ring-1', 'ring-primary-500/20');
+          tab.classList.remove('border-stone-150', 'bg-white');
+          tab.classList.add('bg-[#FDFBF7]');
+          iconBox.classList.remove('bg-stone-100', 'text-stone-500');
+          iconBox.classList.add('bg-primary-600', 'text-white');
+          title.classList.remove('text-stone-700');
+          title.classList.add('text-primary-955');
+          desc.classList.remove('text-stone-400');
+          desc.classList.add('text-stone-500');
+        } else {
+          tab.classList.remove('border-primary-500', 'ring-1', 'ring-primary-500/20', 'bg-[#FDFBF7]');
+          tab.classList.add('border-stone-150', 'bg-white');
+          iconBox.classList.add('bg-stone-100', 'text-stone-500');
+          iconBox.classList.remove('bg-primary-600', 'text-white');
+          title.classList.add('text-stone-700');
+          title.classList.remove('text-primary-955');
+          desc.classList.add('text-stone-400');
+          desc.classList.remove('text-stone-500');
+        }
+      });
+
+      // 3. Highlight the corresponding navigation icon inside mockup footer
+      // Queries dynamically inside the call to handle Lucide custom SVG replacements perfectly
+      const navIcons = document.querySelectorAll('.mock-nav-item svg, .mock-nav-item i');
+      navIcons.forEach((icon, i) => {
+        if (i === index) {
+          icon.classList.remove('text-stone-300');
+          icon.classList.add('text-primary-600');
+        } else {
+          icon.classList.remove('text-primary-600');
+          icon.classList.add('text-stone-300');
+        }
+      });
+    }
+
+
+    // ================= GSAP SCROLL ENTRANCE REVEALS =================
+    // 1. Initialize GSAP and register ScrollTrigger immediately or on DOMContentLoaded
+    function initAnimations() {
+      // Register GSAP ScrollTrigger plugin
+      if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
+      }
+
+      // A. HERO SECTION ENTRANCE (Fades & Slide Up)
+      const heroTl = gsap.timeline();
+      
+      heroTl.from('#navbar', {
+        y: -30,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power2.out",
+        clearProps: "all"
+      });
+      
+      heroTl.from('#hero-badge', {
+        y: 20,
+        opacity: 0,
+        duration: 0.6,
+        ease: "power2.out",
+        clearProps: "all"
+      }, "-=0.4");
+
+      heroTl.from('#hero-title', {
+        y: 40,
+        opacity: 0,
+        duration: 1,
+        ease: "power3.out",
+        clearProps: "all"
+      }, "-=0.5");
+
+      heroTl.from('#hero-subtitle', {
+        y: 20,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power2.out",
+        clearProps: "all"
+      }, "-=0.7");
+
+      heroTl.from('#hero-buttons > a', {
+        y: 20,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: "power2.out",
+        clearProps: "all"
+      }, "-=0.6");
+
+      heroTl.from('#hero-info-footer', {
+        y: 20,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power2.out",
+        clearProps: "all"
+      }, "-=0.6");
+
+      heroTl.from('#hero-phone-mockup', {
+        scale: 0.9,
+        y: 50,
+        opacity: 0,
+        duration: 1.2,
+        ease: "power4.out",
+        clearProps: "all"
+      }, "-=0.8");
+
+      heroTl.from('#float-qibla, #float-ayah, #float-routine', {
+        scale: 0.8,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: "back.out(1.7)",
+        clearProps: "all"
+      }, "-=0.7");
+
+
+      // B. FEATURE CARDS STAGGERED REVEAL (ScrollTriggered)
+      gsap.from('.feature-card', {
+        scrollTrigger: {
+          trigger: '#fitur',
+          start: "top bottom", // Triggers as soon as it enters viewport from bottom
+          toggleActions: "play none none none"
+        },
+        y: 60,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: "power2.out",
+        clearProps: "all"
+      });
+
+
+      // C. INTERACTIVE PLAYGROUND CARDS REVEAL
+      gsap.from('#playground-info > *', {
+        scrollTrigger: {
+          trigger: '#jadwal',
+          start: "top bottom"
+        },
+        x: -40,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: "power2.out",
+        clearProps: "all"
+      });
+
+      gsap.from('#playground-cards > *', {
+        scrollTrigger: {
+          trigger: '#jadwal',
+          start: "top bottom"
+        },
+        scale: 0.95,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.2,
+        ease: "power2.out",
+        clearProps: "all"
+      }, "-=0.5");
+
+
+      // D. PHONE PREVIEW SLIDER SECTION REVEAL
+      gsap.from('#slider-tabs-container > *', {
+        scrollTrigger: {
+          trigger: '#mockup-slider',
+          start: "top bottom"
+        },
+        x: -30,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: "power2.out",
+        clearProps: "all"
+      });
+
+      gsap.from('#slider-phone-container', {
+        scrollTrigger: {
+          trigger: '#mockup-slider',
+          start: "top bottom"
+        },
+        x: 40,
+        opacity: 0,
+        duration: 1,
+        ease: "power2.out",
+        clearProps: "all"
+      }, "-=0.6");
+
+
+      // E. SPIRITUAL QUOTE REVEAL
+      gsap.from('#spiritual-content', {
+        scrollTrigger: {
+          trigger: '#spiritual',
+          start: "top bottom"
+        },
+        y: 30,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power2.out",
+        clearProps: "all"
+      });
+    }
+
+    // Run animation setup immediately if DOM is ready, otherwise wait for listener
+    if (document.readyState === 'interactive' || document.readyState === 'complete') {
+      initAnimations();
+    } else {
+      window.addEventListener('DOMContentLoaded', initAnimations);
+    }
+
+    // 2. Refresh ScrollTrigger once ALL resources (images, fonts, styles) finish loading to handle height shifts
+    function refreshScrollTrigger() {
+      setTimeout(() => {
+        if (typeof ScrollTrigger !== 'undefined') {
+          ScrollTrigger.refresh();
+        }
+      }, 250);
+    }
+
+    if (document.readyState === 'complete') {
+      refreshScrollTrigger();
+    } else {
+      window.addEventListener('load', refreshScrollTrigger);
+    }
+  </script>
+</body>
+</html>
